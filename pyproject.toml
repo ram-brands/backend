@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "ramws"
 version = "0.0.0"
-description = "Gestión de calidad del aire de forma inteligente."
+description = "RAM Web Services."
 authors = [
   "Ariel Martínez <ariel@martinezs.dev>",
 ]
