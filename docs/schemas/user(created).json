@@ -1,0 +1,10 @@
+{
+  "allOf": [
+    {
+      "$ref": "./user.json"
+    },
+    {
+      "$ref": "./login.json"
+    }
+  ]
+}

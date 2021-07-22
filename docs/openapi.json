@@ -1,0 +1,454 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "RAM Web Services’ API",
+    "version": "0.0.0",
+    "x-logo": {
+      "url": "static/img/logo.png",
+      "altText": "RAM Web Services logo"
+    }
+  },
+  "servers":[
+    {
+      "url": "http://localhost:8000",
+      "description": "Development server"
+    },
+    {
+      "url": "https://api-staging.ramws.com",
+      "description": "Staging server (coming soon)"
+    },
+    {
+      "url": "https://api.ramws.com",
+      "description": "Production server (coming soon)"
+    }
+  ],
+  "tags":[
+    {
+      "name": "Users"
+    },
+    {
+      "name": "Misc"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "summary": "Obtain JSON Web Token",
+        "tags":[
+          "Users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./schemas/login.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "./schemas/login.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "enum":[
+                        "No active account found with the given credentials"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "summary": "Create a user",
+        "tags":[
+          "Users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./schemas/user.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "./schemas/user(created).json"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/responses/user_400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "summary": "Retrieve a user",
+        "tags":[
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters":[
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "./schemas/user.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/responses/default_401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/responses/default_403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/responses/default_404"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a user",
+        "tags":[
+          "Users"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./schemas/user.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "./schemas/user.json"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/responses/user_400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/responses/default_401"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/responses/default_403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/responses/default_404"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Health check",
+        "tags":[
+          "Misc"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error (something’s not right)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "enum":[
+                        "Can't connect to database.",
+                        "Unknown database problem."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/error": {
+      "get": {
+        "summary": "Trigger an error",
+        "tags":[
+          "Misc"
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "internalKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Internal-Key"
+      }
+    },
+    "responses": {
+      "user_400": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "This field is required.",
+                "user with this email already exists."
+              ]
+            }
+          },
+          "password": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "This field is required.",
+                "Ensure this field has no less than 6 characters."
+              ]
+            }
+          }
+        }
+      },
+      "default_401": {
+        "oneOf": [
+          {
+            "type": "object",
+            "title": "Missing credentials",
+            "properties": {
+              "detail": {
+                "type": "string",
+                "enum":[
+                  "Authentication credentials were not provided."
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "title": "Bad header",
+            "properties": {
+              "detail": {
+                "type": "string",
+                "enum":[
+                  "Authorization header must contain two space-delimited values"
+                ]
+              },
+              "code": {
+                "type": "string",
+                "enum":[
+                  "bad_authorization_header"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "title": "Invalid token",
+            "properties": {
+              "detail": {
+                "type": "string",
+                "enum":[
+                  "Given token not valid for any token type"
+                ]
+              },
+              "code": {
+                "type": "string",
+                "enum":[
+                  "token_not_valid"
+                ]
+              },
+              "messages": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "default_403": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "string",
+            "enum":[
+              "You do not have permission to perform this action."
+            ]
+          }
+        }
+      },
+      "default_404": {
+        "type": "object",
+        "title": "Resource not found",
+        "properties": {
+          "detail": {
+            "type": "string",
+            "enum":[
+              "Not found."
+            ]
+          }
+        }
+      },
+      "invalid_page_404": {
+        "type": "object",
+        "title": "Invalid page",
+        "properties": {
+          "detail": {
+            "type": "string",
+            "enum": [
+              "Invalid page."
+            ]
+          }
+        }
+      }
+    }
+  }
+}

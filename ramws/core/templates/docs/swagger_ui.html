@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>RAM Web Services’ API</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@3/swagger-ui.css">
+    <link rel="icon" type="image/png" href={% static "img/favicon.png" %}>
+  </head>
+
+  <body>
+    <div id="swagger-ui"></div>
+
+    <script src="https://unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+    <script>
+      window.onload = function() {
+        // Begin Swagger UI call region
+        const ui = SwaggerUIBundle({
+          url: "/docs/openapi.json",
+          dom_id: '#swagger-ui',
+          deepLinking: true,
+          presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIBundle.SwaggerUIStandalonePreset,
+          ],
+          plugins: [
+            SwaggerUIBundle.plugins.DownloadUrl
+          ],
+          layout: "BaseLayout"
+        })
+        window.ui = ui
+      }
+    </script>
+  </body>
+</html>

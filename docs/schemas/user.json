@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "readOnly": true
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "maxLength": 254
+    },
+    "password": {
+      "type": "string",
+      "format": "password",
+      "writeOnly": true
+    },
+    "first_name": {
+      "type": "string",
+      "maxLength": 150
+    },
+    "last_name": {
+      "type": "string",
+      "maxLength": 150
+    },
+    "full_name": {
+      "type": "string",
+      "readOnly": true
+    }
+  }
+}

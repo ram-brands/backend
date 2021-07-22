@@ -1,0 +1,54 @@
+name: checks
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up testing environment
+        run: make localsettings
+
+      - name: Build Docker images
+        run: make build
+
+      - name: Test running functionality
+        run: |
+          docker-compose up --detach
+          docker-compose down
+
+      - name: Run unit tests
+        run: make tests
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.8'
+
+      - name: Set up Poetry
+        run: |
+          make get-poetry
+          echo $HOME/.poetry/bin >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Lint with Black
+        run: make black
+
+      - name: Lint with isort
+        run: make isort
