@@ -56,6 +56,15 @@ class UserAdmin(BaseUserAdmin):
         ),
     ]
 
-    readonly_fields = [
-        "email",
+    add_fieldsets = [
+        (
+            None,
+            {
+                "fields": [
+                    "email",
+                    "password1",
+                    "password2",
+                ],
+            },
+        ),
     ]
