@@ -7,8 +7,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_500_INTERNAL_SERVER_ERROR
 
-admin_site.site_header = settings.PROJECT_NAME
-admin_site.site_title = settings.PROJECT_NAME
+admin_site.site_header = f"{settings.PROJECT_NAME or 'Site'} Administration"
+admin_site.site_title = f"{settings.PROJECT_NAME or 'Site'} Administration"
+admin_site.site_url = settings.MAIN_SITE_URL or "#"
 
 
 @api_view(["GET"])

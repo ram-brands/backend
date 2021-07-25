@@ -1,5 +1,13 @@
 from .settings import *  # noqa: F401,F403
 
+##############
+# ADMIN SITE #
+##############
+
+PROJECT_NAME = "RAM Web Services"
+MAIN_SITE_URL = "http://localhost:8080"
+
+
 ##################
 # AUTHENTICATION #
 ##################
