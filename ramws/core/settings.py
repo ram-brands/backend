@@ -9,7 +9,13 @@ from sentry_sdk.integrations.django import DjangoIntegration
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...).
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-PROJECT_NAME = "RAM Web Services"
+
+##############
+# ADMIN SITE #
+##############
+
+PROJECT_NAME = os.environ.get("PROJECT_NAME")
+MAIN_SITE_URL = os.environ.get("MAIN_SITE_URL")
 
 
 ##########################
