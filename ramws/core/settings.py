@@ -74,7 +74,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
+    "core.middleware.CommonMiddleware",
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -115,7 +115,11 @@ if "DATABASE_URL" in os.environ:
 TEST = "test" in sys.argv
 DJANGO_ENV = os.environ.get("RUN_ENV")
 DEBUG = DJANGO_ENV == "development"
+
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(" ")
+ALLOWED_HEALTH_CHECK_USER_AGENTS = os.environ.get(
+    "ALLOWED_HEALTH_CHECK_USER_AGENTS", ""
+).split(" ")
 
 
 ##################
