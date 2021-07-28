@@ -1,5 +1,5 @@
 # Import the environment-setter image.
-FROM python:3.8.8-buster
+FROM python:3.8-slim-buster
 
 # Add Django’s environment type.
 ARG RUN_ENV
@@ -39,7 +39,7 @@ RUN poetry export -f requirements.txt $(test "$RUN_ENV" = development && echo "-
 # --------------------------------------------------------
 
 # Import the final image.
-FROM python:3.8.8-slim-buster
+FROM python:3.8-slim-buster
 
 # Add Django's secret key.
 ARG DJANGO_SECRET_KEY
