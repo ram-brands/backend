@@ -6,7 +6,7 @@ from django.urls import reverse
 class CommonMiddleware(BaseCommonMiddleware):
     def process_request(self, request):
         """
-        Always allow health checks, regardless of host.
+        Allow health checks from certain user agents, regardless of host.
         """
         health_check_path = reverse("health")
         request_path = request.get_full_path()
