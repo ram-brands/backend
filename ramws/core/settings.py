@@ -42,7 +42,7 @@ THIRD_PARTY_APPS = [
 FIRST_PARTY_APPS = [
     "accounts.apps.Config",
     "docs.apps.Config",
-    "runs.apps.Config",
+    "files.apps.Config",
 ]
 
 INSTALLED_APPS = BUILT_IN_APPS + THIRD_PARTY_APPS + FIRST_PARTY_APPS

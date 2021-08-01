@@ -15,7 +15,10 @@ class Program(BaseModel):
 
 class Run(BaseModel):
     input_name = models.CharField(max_length=200)
-    program = models.ForeignKey(to="runs.Program")
+
+    program = models.ForeignKey(
+        to="files.Program", on_delete=models.PROTECT, related_name="runs"
+    )
 
     input_path = models.CharField(unique=True, max_length=200)
     output_path = models.CharField(unique=True, max_length=200)
@@ -43,8 +46,20 @@ class Run(BaseModel):
 
     @input_file.setter
     def input_file(self, value):
-        self.input_path = f"{self.pk.hex}.zip"
+        self.input_path = f"{self.pk.hex}/input.zip"
+        self.output_path = f"{self.pk.hex}/output.zip"
+
         self._input_content = value
+
+    @property
+    def output_file(self):
+        bucket = get_bucket(name=settings.RUNS_S3_BUCKET)
+        response = download_file(bucket=bucket, path=self.input_path)
+
+        if response.status_code != HTTP_200_OK:
+            raise Exception()
+
+        return response.content.read()
 
     @transaction.atomic
     def save(self, *args, **kwargs):
