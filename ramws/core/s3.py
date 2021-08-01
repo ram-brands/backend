@@ -13,14 +13,14 @@ def get_service_resource():
     return boto3.resource(**kwargs)
 
 
-def get_bucket():
+def get_bucket(name):
     s3 = get_service_resource()
-    return s3.Bucket(name=settings.RUNS_S3_BUCKET)
+    return s3.Bucket(name=name)
 
 
-def upload_file(bucket, path, data):
+def upload_file(bucket, path, content):
     path = settings.STORAGE_PERSONAL_FOLDER + path
-    return bucket.put_object(Key=path, Body=data)
+    return bucket.put_object(Key=path, Body=content)
 
 
 def download_file(bucket, path):
