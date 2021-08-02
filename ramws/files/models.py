@@ -16,14 +16,14 @@ class Program(BaseModel):
 
 
 class Run(BaseModel):
-    input_name = models.FilePathField(max_length=200)
+    input_name = models.CharField(max_length=200)
 
     program = models.ForeignKey(
         to="files.Program", on_delete=models.PROTECT, related_name="runs"
     )
 
-    input_path = models.FilePathField(unique=True, max_length=200)
-    output_path = models.FilePathField(unique=True, max_length=200)
+    input_path = models.CharField(unique=True, max_length=200)
+    output_path = models.CharField(unique=True, max_length=200)
 
     class Status(models.IntegerChoices):
         WARNING = 1
@@ -49,7 +49,7 @@ class Run(BaseModel):
         self._input_file = value
 
     @property
-    def output_content(self):
+    def output_file(self):
         storage = Storage()
         return storage.open(name=self.output_path)
 
