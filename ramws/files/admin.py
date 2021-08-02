@@ -1,12 +1,10 @@
 from django import forms
 from django.conf import settings
 from django.contrib import admin
+from django.urls import reverse
+from django.utils.html import format_html
 
 from .models import Program, Run
-
-
-import logging
-logger = logging.getLogger(__name__)
 
 
 class RunInline(admin.TabularInline):
@@ -74,16 +72,10 @@ class RunForm(forms.ModelForm):
             "program",
         ]
 
-        # readonly_fields = [
-        #     "input_name",
-        #     "program",
-        #     "created_at"
-        # ]
-
-    input_file = forms.FileField()
+    upload_input_file = forms.FileField()
 
     def save(self, *args, **kwargs):
-        input_file = self.cleaned_data["input_file"]
+        input_file = self.cleaned_data.pop("upload_input_file")
         self.instance.input_file = input_file
 
         return super().save(*args, **kwargs)
@@ -91,6 +83,8 @@ class RunForm(forms.ModelForm):
 
 @admin.register(Run)
 class RunAdmin(admin.ModelAdmin):
+    list_display_links = None
+
     ordering = [
         "-created_at",
     ]
@@ -101,10 +95,12 @@ class RunAdmin(admin.ModelAdmin):
     ]
 
     list_display = [
-        "__str__",
+        "input_name",
         "program",
         "created_at",
         "status",
+        "download_input_file",
+        "download_output_file",
     ]
 
     list_filter = [
@@ -115,8 +111,20 @@ class RunAdmin(admin.ModelAdmin):
 
     form = RunForm
 
-    # def has_add_permission(self, request):
-    #     return False
+    @admin.display(description="Input file")
+    def download_input_file(self, obj):
+        return format_html(
+            '<a href="{}">Download</a>', reverse("files:input-file", args=[obj.pk])
+        )
+
+    @admin.display(description="Output file")
+    def download_output_file(self, obj):
+        return format_html(
+            '<a href="{}">Download</a>', reverse("files:output-file", args=[obj.pk])
+        )
+
+    def has_view_permission(self, request, obj=None):
+        return obj is None
 
     def has_change_permission(self, request, obj=None):
         return False

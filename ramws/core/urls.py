@@ -8,4 +8,5 @@ urlpatterns = [
     path("", health_check, name="health"),
     path("", include("accounts.urls")),
     path("", include("docs.urls")),
+    path("", include("files.urls")),
 ]
