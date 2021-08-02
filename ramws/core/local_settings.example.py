@@ -50,4 +50,10 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 SECRET_KEY = "X.:IU=jrQLF+<uOBeh/ZK3vE4AaCL{.d;UO(g]>qV-w6sb:nfF"
 
+AWS_ACCESS_KEY_ID = "AKIA4AWHNDASTGTJVSZA"
+AWS_SECRET_ACCESS_KEY = "KnZB+StfliRAvr7TX283URDgprv0gZ+IHx8x6JW2"
+
 AWS_REGION = "example-region"
+RUNS_S3_BUCKET = "example-bucket"
+
+AWS_LOCATION = "anonymous/"
