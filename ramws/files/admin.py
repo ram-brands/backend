@@ -1,7 +1,12 @@
+from django import forms
 from django.conf import settings
 from django.contrib import admin
 
 from .models import Program, Run
+
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 class RunInline(admin.TabularInline):
@@ -61,10 +66,33 @@ class ProgramAdmin(admin.ModelAdmin):
         return obj.runs.count()
 
 
+class RunForm(forms.ModelForm):
+    class Meta:
+        model = Run
+
+        fields = [
+            "program",
+        ]
+
+        # readonly_fields = [
+        #     "input_name",
+        #     "program",
+        #     "created_at"
+        # ]
+
+    input_file = forms.FileField()
+
+    def save(self, *args, **kwargs):
+        input_file = self.cleaned_data["input_file"]
+        self.instance.input_file = input_file
+
+        return super().save(*args, **kwargs)
+
+
 @admin.register(Run)
 class RunAdmin(admin.ModelAdmin):
     ordering = [
-        "created_at",
+        "-created_at",
     ]
 
     search_fields = [
@@ -85,20 +113,10 @@ class RunAdmin(admin.ModelAdmin):
         "status",
     ]
 
-    fields = [
-        "input_name",
-        "program",
-        "status",
-    ]
+    form = RunForm
 
-    readonly_fields = [
-        "input_name",
-        "program",
-        "status",
-    ]
-
-    def has_add_permission(self, request):
-        return False
+    # def has_add_permission(self, request):
+    #     return False
 
     def has_change_permission(self, request, obj=None):
         return False

@@ -47,6 +47,7 @@ class Run(BaseModel):
         self.output_path = f"{self.pk.hex}/output.zip"
 
         self._input_file = value
+        self.input_name = value.name
 
     @property
     def output_file(self):
