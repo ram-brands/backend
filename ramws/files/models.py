@@ -4,8 +4,8 @@ from django.db.models.fields import CharField
 
 from core.base import BaseModel
 
-from .storage import Storage
 from .queue import Queue
+from .storage import Storage
 
 
 class Program(BaseModel):
