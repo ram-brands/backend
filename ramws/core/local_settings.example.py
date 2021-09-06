@@ -55,5 +55,6 @@ AWS_SECRET_ACCESS_KEY = "KnZB+StfliRAvr7TX283URDgprv0gZ+IHx8x6JW2"
 
 AWS_REGION = "example-region"
 RUNS_S3_BUCKET = "example-bucket"
+RUNS_SQS_QUEUE = "example-queue"
 
 AWS_LOCATION = "anonymous/"

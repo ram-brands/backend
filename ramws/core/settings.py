@@ -198,6 +198,7 @@ AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
 
 AWS_REGION = os.environ.get("AWS_REGION")
 RUNS_S3_BUCKET = os.environ.get("RUNS_S3_BUCKET")
+RUNS_SQS_QUEUE = os.environ.get("RUNS_SQS_QUEUE")
 
 AWS_LOCATION = os.environ.get("AWS_LOCATION", "")
 

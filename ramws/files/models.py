@@ -5,6 +5,7 @@ from django.db.models.fields import CharField
 from core.base import BaseModel
 
 from .storage import Storage
+from .queue import Queue
 
 
 class Program(BaseModel):
@@ -58,6 +59,9 @@ class Run(BaseModel):
     def save(self, *args, **kwargs):
         storage = Storage()
         storage.save(name=self.input_path, content=self._input_file)
+
+        queue = Queue()
+        queue.post_run(run_id=self.id, program_name=self.program)
 
         super().save(*args, **kwargs)
 
