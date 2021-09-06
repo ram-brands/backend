@@ -14,4 +14,4 @@ def input_file(request, pk):
 @api_view(["GET"])
 def output_file(request, pk):
     run = Run.objects.get(pk=pk)
-    return AttachmentHttpResponse(data=run.output_file, name="output.zip")
+    return AttachmentHttpResponse(content=run.output_file, name="output.zip")
