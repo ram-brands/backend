@@ -28,3 +28,7 @@ class BaseModel(models.Model):
     @property
     def owners(self):
         return set()
+
+    @property
+    def hex_id(self):
+        return self.pk.hex

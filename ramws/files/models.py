@@ -45,8 +45,8 @@ class Run(BaseModel):
 
     @input_file.setter
     def input_file(self, value):
-        self.input_path = f"{self.pk.hex}/input.zip"
-        self.output_path = f"{self.pk.hex}/output.zip"
+        self.input_path = f"{self.hex_id}/input.zip"
+        self.output_path = f"{self.hex_id}/output.zip"
 
         self._input_file = value
         self.input_name = value.name
@@ -62,7 +62,7 @@ class Run(BaseModel):
         storage.save(name=self.input_path, content=self._input_file)
 
         queue = Queue()
-        queue.post_run(run_id=self.id, program_name=self.program.code)
+        queue.post_run(run_id=self.hex_id, program_name=self.program.code)
 
         super().save(*args, **kwargs)
 
