@@ -42,16 +42,19 @@ class ProgramAdmin(admin.ModelAdmin):
 
     search_fields = [
         "name",
+        "code",
         "description",
     ]
 
     list_display = [
         "__str__",
+        "code",
         "number_of_runs",
     ]
 
     fields = [
         "name",
+        "code",
         "description",
     ]
 

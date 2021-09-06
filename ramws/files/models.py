@@ -10,6 +10,7 @@ from .queue import Queue
 
 class Program(BaseModel):
     name = models.CharField(max_length=100)
+    code = models.CharField(max_length=50, blank=True)
     description = models.TextField()
 
     def __str__(self):
