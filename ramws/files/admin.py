@@ -49,6 +49,7 @@ class ProgramAdmin(admin.ModelAdmin):
     list_display = [
         "__str__",
         "code",
+        "ellipsis_description",
         "number_of_runs",
     ]
 
@@ -61,6 +62,12 @@ class ProgramAdmin(admin.ModelAdmin):
     inlines = [
         RunInline,
     ]
+
+    @admin.display(description="Description")
+    def ellipsis_description(self, obj):
+        truncated = obj.description[:100]
+        suffix = "..." if (len(truncated) < len(obj.description)) else ""
+        return truncated + suffix
 
     @admin.display(description="# Runs")
     def number_of_runs(self, obj):
