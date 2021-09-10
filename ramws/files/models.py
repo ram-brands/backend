@@ -27,6 +27,10 @@ class Run(BaseModel):
     input_path = models.CharField(unique=True, max_length=200)
     output_path = models.CharField(unique=True, max_length=200)
 
+    created_by = models.ForeignKey(
+        to="accounts.User", on_delete=models.PROTECT, related_name="runs"
+    )
+
     class Status(models.IntegerChoices):
         WARNING = 1
         OK = 2

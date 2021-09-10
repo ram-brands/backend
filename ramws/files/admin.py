@@ -121,6 +121,32 @@ class RunAdmin(admin.ModelAdmin):
 
     form = RunForm
 
+    def get_list_display(self, request):
+        list_display = super().get_list_display(request)
+
+        if request.user.is_superuser:
+            return list_display + ["created_by__linkified"]
+        return list_display
+
+    def get_list_filter(self, request):
+        list_filter = super().get_list_filter(request)
+
+        if request.user.is_superuser:
+            return list_filter + ["created_by"]
+        return list_filter
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+
+        if request.user.is_superuser:
+            return qs
+
+        return qs.filter(created_by=request.user)
+
+    def save_model(self, request, obj, form, change):
+        obj.created_by = request.user
+        super().save_model(request, obj, form, change)
+
     @admin.display(description="Input file")
     def download_input_file(self, obj):
         return format_html(
@@ -131,6 +157,14 @@ class RunAdmin(admin.ModelAdmin):
     def download_output_file(self, obj):
         return format_html(
             '<a href="{}">Download</a>', reverse("files:output-file", args=[obj.pk])
+        )
+
+    @admin.display(description="Created by")
+    def created_by__linkified(self, obj):
+        return format_html(
+            '<a href="{}">{}</a>',
+            reverse("admin:accounts_user_change", args=[obj.created_by.pk]),
+            obj.created_by,
         )
 
     def has_view_permission(self, request, obj=None):
