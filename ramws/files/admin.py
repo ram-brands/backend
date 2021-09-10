@@ -52,14 +52,11 @@ class ProgramAdmin(admin.ModelAdmin):
 
     list_display = [
         "__str__",
-        "code",
-        "ellipsis_description",
-        "number_of_runs",
+        "description__ellipsis",
     ]
 
     fields = [
         "name",
-        "code",
         "description",
     ]
 
@@ -73,8 +70,20 @@ class ProgramAdmin(admin.ModelAdmin):
             qs if request.user.is_superuser else qs.filter(authorized_users=request.user)
         )
 
+    def get_list_display(self, request):
+        list_display = super().get_list_display(request)
+        return (
+            (list_display + ["code", "number_of_runs"])
+            if request.user.is_superuser
+            else list_display
+        )
+
+    def get_fields(self, request, obj):
+        fields = super().get_fields(request, obj)
+        return (fields + ["code"]) if request.user.is_superuser else fields
+
     @admin.display(description="Description")
-    def ellipsis_description(self, obj):
+    def description__ellipsis(self, obj):
         truncated = obj.description[:100]
         suffix = "..." if (len(truncated) < len(obj.description)) else ""
         return truncated + suffix
