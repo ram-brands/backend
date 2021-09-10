@@ -112,7 +112,7 @@ class RunForm(forms.ModelForm):
 
 @admin.register(Run)
 class RunAdmin(admin.ModelAdmin):
-    list_display_links = None
+    # list_display_links = None
 
     ordering = [
         "-created_at",
@@ -124,6 +124,7 @@ class RunAdmin(admin.ModelAdmin):
     ]
 
     list_display = [
+        "__str__",
         "input_name",
         "program",
         "created_at",
@@ -158,6 +159,12 @@ class RunAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         return qs if request.user.is_superuser else qs.filter(created_by=request.user)
 
+    def render_change_form(
+        self, request, context, add=False, change=False, form_url="", obj=None
+    ):
+        context["show_save_and_continue"] = False
+        return super().render_change_form(request, context, add, change, form_url, obj)
+
     def save_model(self, request, obj, form, change):
         obj.created_by = request.user
         super().save_model(request, obj, form, change)
@@ -181,9 +188,6 @@ class RunAdmin(admin.ModelAdmin):
             reverse("admin:accounts_user_change", args=[obj.created_by.pk]),
             obj.created_by,
         )
-
-    def has_view_permission(self, request, obj=None):
-        return obj is None
 
     def has_change_permission(self, request, obj=None):
         return False
