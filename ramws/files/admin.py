@@ -67,6 +67,12 @@ class ProgramAdmin(admin.ModelAdmin):
         RunInline,
     ]
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return (
+            qs if request.user.is_superuser else qs.filter(authorized_users=request.user)
+        )
+
     @admin.display(description="Description")
     def ellipsis_description(self, obj):
         truncated = obj.description[:100]

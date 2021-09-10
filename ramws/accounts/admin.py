@@ -40,8 +40,8 @@ class UserAdmin(BaseUserAdmin):
                     "is_superuser",
                     "groups",
                     "user_permissions",
+                    "authorized_programs",
                 ],
-                "classes": ["collapse"],
             },
         ),
         (
@@ -68,3 +68,5 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     ]
+
+    filter_horizontal = ["groups", "user_permissions", "authorized_programs"]

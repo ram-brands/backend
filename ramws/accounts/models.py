@@ -31,6 +31,10 @@ class User(BaseModel, AbstractUser):
     username = None
     email = models.EmailField(unique=True, verbose_name="email address")
 
+    authorized_programs = models.ManyToManyField(
+        to="files.Program", blank=True, related_name="authorized_users"
+    )
+
     objects = UserManager()
 
     def delete(self, *args, **kwargs):
