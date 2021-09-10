@@ -112,8 +112,6 @@ class RunForm(forms.ModelForm):
 
 @admin.register(Run)
 class RunAdmin(admin.ModelAdmin):
-    # list_display_links = None
-
     ordering = [
         "-created_at",
     ]
@@ -124,7 +122,6 @@ class RunAdmin(admin.ModelAdmin):
     ]
 
     list_display = [
-        "__str__",
         "input_name",
         "program",
         "created_at",
