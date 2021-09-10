@@ -24,6 +24,10 @@ class RunInline(admin.TabularInline):
         "created_at",
     ]
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs if request.user.is_superuser else qs.filter(created_by=request.user)
+
     def has_add_permission(self, request, obj=None):
         return False
 
@@ -123,25 +127,21 @@ class RunAdmin(admin.ModelAdmin):
 
     def get_list_display(self, request):
         list_display = super().get_list_display(request)
-
-        if request.user.is_superuser:
-            return list_display + ["created_by__linkified"]
-        return list_display
+        return (
+            (list_display + ["created_by__linkified"])
+            if request.user.is_superuser
+            else list_display
+        )
 
     def get_list_filter(self, request):
         list_filter = super().get_list_filter(request)
-
-        if request.user.is_superuser:
-            return list_filter + ["created_by"]
-        return list_filter
+        return (
+            (list_filter + ["created_by"]) if request.user.is_superuser else list_filter
+        )
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-
-        if request.user.is_superuser:
-            return qs
-
-        return qs.filter(created_by=request.user)
+        return qs if request.user.is_superuser else qs.filter(created_by=request.user)
 
     def save_model(self, request, obj, form, change):
         obj.created_by = request.user

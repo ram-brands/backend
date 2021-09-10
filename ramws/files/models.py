@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db import models, transaction
-from django.db.models.fields import CharField
 
 from core.base import BaseModel
 
