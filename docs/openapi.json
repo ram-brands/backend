@@ -34,7 +34,7 @@
     }
   ],
   "paths": {
-    "runs/{run_id}/confirmation": {
+    "/runs/{run_id}/confirmation": {
       "post": {
         "summary": "Obtain JSON Web Token",
         "tags":[
