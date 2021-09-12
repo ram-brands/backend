@@ -64,9 +64,6 @@ class Run(BaseModel):
 
     @input_file.setter
     def input_file(self, value):
-        self.input_path = f"{self.str_id}/input.zip"
-        self.output_path = f"{self.str_id}/output.zip"
-
         self._input_file = value
         self.input_name = value.name
 
