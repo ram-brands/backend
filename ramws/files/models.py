@@ -80,7 +80,7 @@ class Run(BaseModel):
             storage.save(name=self.input_path, content=self._input_file)
 
             queue = Queue()
-            queue.post_run(run_id=self.hex_id, program_name=self.program.code)
+            queue.post_run(run_id=self.str_id, program_name=self.program.code)
 
         super().save(*args, **kwargs)
 
