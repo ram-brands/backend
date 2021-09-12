@@ -103,6 +103,17 @@ class RunForm(forms.ModelForm):
 
     upload_input_file = forms.FileField()
 
+    def __init__(self, *args, **kwargs):
+        request = kwargs.pop("request")
+        super().__init__(*args, **kwargs)
+
+        program_qs = self.fields["program"].queryset
+
+        if not request.user.is_superuser:
+            self.fields["program"].queryset = program_qs.filter(
+                authorized_users=request.user
+            )
+
     def save(self, *args, **kwargs):
         input_file = self.cleaned_data.pop("upload_input_file")
         self.instance.input_file = input_file
@@ -157,6 +168,16 @@ class RunAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         return qs if request.user.is_superuser else qs.filter(created_by=request.user)
+
+    def get_form(self, request, obj=None, **kwargs):
+        AdminForm = super().get_form(request, obj, **kwargs)
+
+        class AdminFormWithRequest(AdminForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs["request"] = request
+                return AdminForm(*args, **kwargs)
+
+        return AdminFormWithRequest
 
     def render_change_form(
         self, request, context, add=False, change=False, form_url="", obj=None
