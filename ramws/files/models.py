@@ -50,11 +50,11 @@ class Run(BaseModel):
 
     @property
     def logs_path(self):
-        return f"{self.base_path}/logs.zip"
+        return f"{self.base_path}/logs.txt"
 
     @property
     def warnings_path(self):
-        return f"{self.base_path}/warnings.zip"
+        return f"{self.base_path}/warnings.txt"
 
     @property
     def input_file(self):
@@ -70,6 +70,16 @@ class Run(BaseModel):
     def output_file(self):
         storage = Storage()
         return storage.open(name=self.output_path)
+
+    @property
+    def logs_file(self):
+        storage = Storage()
+        return storage.open(name=self.logs_path)
+
+    @property
+    def warnings_file(self):
+        storage = Storage()
+        return storage.open(name=self.warnings_path)
 
     @transaction.atomic
     def save(self, *args, **kwargs):
