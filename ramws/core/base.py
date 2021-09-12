@@ -24,5 +24,5 @@ class BaseModel(models.Model):
         return set()
 
     @property
-    def hex_id(self):
-        return self.pk.hex
+    def str_id(self):
+        return str(self.pk)

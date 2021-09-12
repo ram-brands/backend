@@ -43,19 +43,19 @@ class Run(BaseModel):
 
     @property
     def input_path(self):
-        return f"{self.hex_id}/input.zip"
+        return f"{self.str_id}/input.zip"
 
     @property
     def output_path(self):
-        return f"{self.hex_id}/output.zip"
+        return f"{self.str_id}/output.zip"
 
     @property
     def logs_path(self):
-        return f"{self.hex_id}/logs.txt"
+        return f"{self.str_id}/logs.txt"
 
     @property
     def warnings_path(self):
-        return f"{self.hex_id}/warnings.txt"
+        return f"{self.str_id}/warnings.txt"
 
     @property
     def input_file(self):
@@ -64,8 +64,8 @@ class Run(BaseModel):
 
     @input_file.setter
     def input_file(self, value):
-        self.input_path = f"{self.hex_id}/input.zip"
-        self.output_path = f"{self.hex_id}/output.zip"
+        self.input_path = f"{self.str_id}/input.zip"
+        self.output_path = f"{self.str_id}/output.zip"
 
         self._input_file = value
         self.input_name = value.name
@@ -82,7 +82,7 @@ class Run(BaseModel):
             storage.save(name=self.input_path, content=self._input_file)
 
             queue = Queue()
-            queue.post_run(run_id=self.hex_id, program_name=self.program.code)
+            queue.post_run(run_id=self.str_id, program_name=self.program.code)
 
         super().save(*args, **kwargs)
 
