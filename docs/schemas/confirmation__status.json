@@ -1,0 +1,25 @@
+{
+  "type": "integer",
+  "oneOf": [
+    {
+      "enum": [1],
+      "title": "WARNING"
+    },
+    {
+      "enum": [2],
+      "title": "OK"
+    },
+    {
+      "enum": [3],
+      "title": "PENDING"
+    },
+    {
+      "enum": [4],
+      "title": "CLIENT_ERROR"
+    },
+    {
+      "enum": [5],
+      "title": "SERVER_ERROR"
+    }
+  ]
+}

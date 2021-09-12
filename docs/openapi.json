@@ -24,6 +24,9 @@
   ],
   "tags":[
     {
+      "name": "Files"
+    },
+    {
       "name": "Users"
     },
     {
@@ -31,6 +34,40 @@
     }
   ],
   "paths": {
+    "runs/{run_id}/confirmation": {
+      "post": {
+        "summary": "Obtain JSON Web Token",
+        "tags":[
+          "Files"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./schemas/confirmation.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
+    },
     "/login": {
       "post": {
         "summary": "Obtain JSON Web Token",
