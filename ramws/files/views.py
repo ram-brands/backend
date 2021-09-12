@@ -21,6 +21,18 @@ def output_file(request, pk):
     return AttachmentHttpResponse(content=run.output_file, name="output.zip")
 
 
+@api_view(["GET"])
+def logs_file(request, pk):
+    run = Run.objects.get(pk=pk)
+    return AttachmentHttpResponse(content=run.logs_file, name="logs.txt")
+
+
+@api_view(["GET"])
+def warnings_file(request, pk):
+    run = Run.objects.get(pk=pk)
+    return AttachmentHttpResponse(content=run.warnings_file, name="warnings.txt")
+
+
 @api_view(["POST"])
 def confirmation(request, pk):
     run = Run.objects.get(pk=pk)

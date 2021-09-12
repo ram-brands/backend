@@ -141,6 +141,7 @@ class RunAdmin(admin.ModelAdmin):
         "status",
         "download_input_file",
         "download_output_file",
+        "download_warnings_file",
     ]
 
     list_filter = [
@@ -154,7 +155,7 @@ class RunAdmin(admin.ModelAdmin):
     def get_list_display(self, request):
         list_display = super().get_list_display(request)
         return (
-            (list_display + ["created_by__linkified"])
+            (list_display + ["created_by__linkified", "download_logs_file"])
             if request.user.is_superuser
             else list_display
         )
@@ -189,16 +190,28 @@ class RunAdmin(admin.ModelAdmin):
         obj.created_by = request.user
         super().save_model(request, obj, form, change)
 
-    @admin.display(description="Input file")
+    @admin.display(description="Input")
     def download_input_file(self, obj):
         return format_html(
             '<a href="{}">Download</a>', reverse("files:input-file", args=[obj.pk])
         )
 
-    @admin.display(description="Output file")
+    @admin.display(description="Output")
     def download_output_file(self, obj):
         return format_html(
             '<a href="{}">Download</a>', reverse("files:output-file", args=[obj.pk])
+        )
+
+    @admin.display(description="Logs")
+    def download_logs_file(self, obj):
+        return format_html(
+            '<a href="{}">Download</a>', reverse("files:logs-file", args=[obj.pk])
+        )
+
+    @admin.display(description="Warnings")
+    def download_warnings_file(self, obj):
+        return format_html(
+            '<a href="{}">Download</a>', reverse("files:warnings-file", args=[obj.pk])
         )
 
     @admin.display(description="Created by")
