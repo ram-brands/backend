@@ -23,8 +23,7 @@ class Run(BaseModel):
         to="files.Program", on_delete=models.PROTECT, related_name="runs"
     )
 
-    input_path = models.CharField(unique=True, max_length=200)
-    output_path = models.CharField(unique=True, max_length=200)
+    base_path = models.CharField(unique=True, max_length=200)
 
     created_by = models.ForeignKey(
         to="accounts.User", on_delete=models.PROTECT, related_name="runs"
@@ -43,19 +42,19 @@ class Run(BaseModel):
 
     @property
     def input_path(self):
-        return f"{self.str_id}/input.zip"
+        return f"{self.base_path}/input.zip"
 
     @property
     def output_path(self):
-        return f"{self.str_id}/output.zip"
+        return f"{self.base_path}/output.zip"
 
     @property
     def logs_path(self):
-        return f"{self.str_id}/logs.txt"
+        return f"{self.base_path}/logs.zip"
 
     @property
     def warnings_path(self):
-        return f"{self.str_id}/warnings.txt"
+        return f"{self.base_path}/warnings.zip"
 
     @property
     def input_file(self):
@@ -75,11 +74,13 @@ class Run(BaseModel):
     @transaction.atomic
     def save(self, *args, **kwargs):
         if self._state.adding:
+            self.base_path = self.str_id
+
             storage = Storage()
             storage.save(name=self.input_path, content=self._input_file)
 
             queue = Queue()
-            queue.post_run(run_id=self.str_id, program_name=self.program.code)
+            queue.post_run(run_id=self.hex_id, program_name=self.program.code)
 
         super().save(*args, **kwargs)
 
