@@ -42,6 +42,22 @@ class Run(BaseModel):
     )
 
     @property
+    def input_path(self):
+        return f"{self.hex_id}/input.zip"
+
+    @property
+    def output_path(self):
+        return f"{self.hex_id}/output.zip"
+
+    @property
+    def logs_path(self):
+        return f"{self.hex_id}/logs.txt"
+
+    @property
+    def warnings_path(self):
+        return f"{self.hex_id}/warnings.txt"
+
+    @property
     def input_file(self):
         storage = Storage()
         return storage.open(name=self.input_path)
@@ -61,11 +77,12 @@ class Run(BaseModel):
 
     @transaction.atomic
     def save(self, *args, **kwargs):
-        storage = Storage()
-        storage.save(name=self.input_path, content=self._input_file)
+        if self._state.adding:
+            storage = Storage()
+            storage.save(name=self.input_path, content=self._input_file)
 
-        queue = Queue()
-        queue.post_run(run_id=self.hex_id, program_name=self.program.code)
+            queue = Queue()
+            queue.post_run(run_id=self.hex_id, program_name=self.program.code)
 
         super().save(*args, **kwargs)
 
