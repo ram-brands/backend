@@ -190,29 +190,40 @@ class RunAdmin(admin.ModelAdmin):
         obj.created_by = request.user
         super().save_model(request, obj, form, change)
 
+    @staticmethod
+    def formatted_download_html(href, enabled=True):
+        if enabled:
+            return format_html('<a href="{}">Download</a>', href)
+        return format_html(
+            '<span style="opacity: 0.5; cursor: not-allowed;">Download</span>'
+        )
+
     @admin.display(description="Input")
     def download_input_file(self, obj):
-        return format_html(
-            '<a href="{}">Download</a>', reverse("files:input-file", args=[obj.pk])
-        )
+        href = reverse("files:input-file", args=[obj.pk])
+
+        return self.formatted_download_html(href)
 
     @admin.display(description="Output")
     def download_output_file(self, obj):
-        return format_html(
-            '<a href="{}">Download</a>', reverse("files:output-file", args=[obj.pk])
-        )
+        href = reverse("files:output-file", args=[obj.pk])
+        enabled = obj.status != Run.Status.PENDING
+
+        return self.formatted_download_html(href, enabled)
 
     @admin.display(description="Logs")
     def download_logs_file(self, obj):
-        return format_html(
-            '<a href="{}">Download</a>', reverse("files:logs-file", args=[obj.pk])
-        )
+        href = reverse("files:logs-file", args=[obj.pk])
+        enabled = obj.status != Run.Status.PENDING
+
+        return self.formatted_download_html(href, enabled)
 
     @admin.display(description="Warnings")
     def download_warnings_file(self, obj):
-        return format_html(
-            '<a href="{}">Download</a>', reverse("files:warnings-file", args=[obj.pk])
-        )
+        href = reverse("files:warnings-file", args=[obj.pk])
+        enabled = obj.status != Run.Status.PENDING
+
+        return self.formatted_download_html(href, enabled)
 
     @admin.display(description="Created by")
     def created_by__linkified(self, obj):
