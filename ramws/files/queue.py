@@ -17,7 +17,9 @@ class Queue:
         )
 
     def send_message(self, body):
-        self.client.send_message(QueueUrl=self.queue_url, MessageBody=body)
+        self.client.send_message(
+            QueueUrl=self.queue_url, MessageBody=body, MessageGroupId="0"
+        )
 
     def post_run(self, run_id, program_name):
         message_body = json.dumps(dict(run_id=run_id, program_name=program_name))
