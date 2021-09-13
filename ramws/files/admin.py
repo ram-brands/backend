@@ -155,7 +155,7 @@ class RunAdmin(admin.ModelAdmin):
     def get_list_display(self, request):
         list_display = super().get_list_display(request)
         return (
-            (list_display + ["created_by__linkified", "download_logs_file"])
+            (list_display + ["download_logs_file", "created_by__linkified"])
             if request.user.is_superuser
             else list_display
         )
