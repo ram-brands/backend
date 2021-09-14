@@ -25,13 +25,13 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Docker image
-        run: docker build -t $ECR_REPOSITORY:latest --build-arg RUN_ENV=production --build-arg DJANGO_SECRET_KEY="$DJANGO_SECRET_KEY" .
+        run: docker build -t $ECR_REPOSITORY:stable --build-arg RUN_ENV=production --build-arg DJANGO_SECRET_KEY="$DJANGO_SECRET_KEY" .
         env:
           DJANGO_SECRET_KEY: ${{ secrets.PRODUCTION_DJANGO_SECRET_KEY }}
           ECR_REPOSITORY: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.APPLICATION_NAME }}
 
       - name: Push Docker image to Amazon ECR
-        run: docker push $ECR_REPOSITORY:latest
+        run: docker push $ECR_REPOSITORY:stable
         env:
           ECR_REPOSITORY: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.APPLICATION_NAME }}
 
@@ -48,4 +48,4 @@ jobs:
           region: ${{ secrets.AWS_REGION }}
           application_name: ${{ secrets.APPLICATION_NAME }}
           environment_name: production
-          version_label: ${{ secrets.APPLICATION_NAME }}-latest
+          version_label: ${{ secrets.APPLICATION_NAME }}-stable
