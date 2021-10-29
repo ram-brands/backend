@@ -223,6 +223,14 @@ STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 
+############
+# TIMEZONE #
+############
+
+USE_TZ = True
+TIME_ZONE = "America/Santiago"
+
+
 ########
 # URLS #
 ########
