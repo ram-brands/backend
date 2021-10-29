@@ -144,6 +144,15 @@ TEMPLATES = [
 ]
 
 
+########################
+# INTERNATIONALIZATION #
+########################
+
+LANGUAGE_CODE = "es-CL"
+USE_I18N = True
+USE_L10N = True
+
+
 ########
 # LOGS #
 ########
