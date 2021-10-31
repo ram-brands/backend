@@ -131,7 +131,7 @@ class RunExtendedStatusListFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         return [
             ("warning", "Warning"),
-            ("ok", "OK"),
+            ("ok", "Ok"),
             ("pending_or_timeout", "Pending or Timeout"),
             ("client_error", "Client Error"),
             ("server_error", "Server Error"),
@@ -237,7 +237,7 @@ class RunAdmin(admin.ModelAdmin):
         return (
             "Timeout"
             if ((obj.status == Run.Status.PENDING) and (obj.created_at < one_hour_ago))
-            else obj.status
+            else obj.status.label
         )
 
     @staticmethod
