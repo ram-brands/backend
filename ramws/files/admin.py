@@ -1,7 +1,10 @@
+import datetime as dt
+
 from django import forms
 from django.conf import settings
 from django.contrib import admin
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.html import format_html
 
 from .models import Program, Run
@@ -121,6 +124,41 @@ class RunForm(forms.ModelForm):
         return super().save(*args, **kwargs)
 
 
+class RunExtendedStatusListFilter(admin.SimpleListFilter):
+    title = "status"
+    parameter_name = "status"
+
+    def lookups(self, request, model_admin):
+        return [
+            ("warning", "Warning"),
+            ("ok", "OK"),
+            ("pending_or_timeout", "Pending or Timeout"),
+            ("client_error", "Client Error"),
+            ("server_error", "Server Error"),
+        ]
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        qs = queryset
+
+        if value == "warning":
+            qs = qs.filter(status=Run.Status.WARNING)
+
+        elif value == "ok":
+            qs = qs.filter(status=Run.Status.OK)
+
+        elif value == "pending_or_timeout":
+            qs = qs.filter(status=Run.Status.PENDING)
+
+        elif value == "client_error":
+            qs = qs.filter(status=Run.Status.CLIENT_ERROR)
+
+        elif value == "server_error":
+            qs = qs.filter(status=Run.Status.SERVER_ERROR)
+
+        return qs
+
+
 @admin.register(Run)
 class RunAdmin(admin.ModelAdmin):
     list_display_links = None
@@ -138,7 +176,7 @@ class RunAdmin(admin.ModelAdmin):
         "input_name",
         "program",
         "created_at",
-        "status",
+        "extended_status",
         "download_input_file",
         "download_output_file",
         "download_warnings_file",
@@ -147,7 +185,7 @@ class RunAdmin(admin.ModelAdmin):
     list_filter = [
         "program",
         "created_at",
-        "status",
+        RunExtendedStatusListFilter,
     ]
 
     form = RunForm
@@ -189,6 +227,18 @@ class RunAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.created_by = request.user
         super().save_model(request, obj, form, change)
+
+    @admin.display(description="Status")
+    def extended_status(self, obj):
+        now = timezone.now()
+        one_hour = dt.timedelta(hours=1)
+        one_hour_ago = now - one_hour
+
+        return (
+            "Pending (timeout)"
+            if ((obj.status == Run.Status.PENDING) and (obj.created_at < one_hour_ago))
+            else obj.status
+        )
 
     @staticmethod
     def formatted_download_html(href, enabled=True):
