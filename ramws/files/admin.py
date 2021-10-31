@@ -235,7 +235,7 @@ class RunAdmin(admin.ModelAdmin):
         one_hour_ago = now - one_hour
 
         return (
-            "Pending (timeout)"
+            "Timeout"
             if ((obj.status == Run.Status.PENDING) and (obj.created_at < one_hour_ago))
             else obj.status
         )
