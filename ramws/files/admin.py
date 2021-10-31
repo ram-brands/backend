@@ -237,7 +237,7 @@ class RunAdmin(admin.ModelAdmin):
         return (
             "Timeout"
             if ((obj.status == Run.Status.PENDING) and (obj.created_at < one_hour_ago))
-            else obj.status.label
+            else Run.Status._value2label_map_[obj.status]
         )
 
     @staticmethod
